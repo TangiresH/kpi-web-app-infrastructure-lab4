@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14.1-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: django-backend
+    environment:
+      - DB_HOST=db
+      - DB_NAME=mydb
+      - DB_USER=user
+      - DB_PASSWORD=password
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend  # Шлях до Dockerfile для frontend
+      dockerfile: Dockerfile  # Назва Dockerfile
+    container_name: react-frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
+    driver: bridge
