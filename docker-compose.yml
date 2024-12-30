@@ -15,7 +15,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: django-backend
+    container_name: backend-django
     environment:
       - DB_HOST=db
       - DB_NAME=mydb
@@ -32,9 +32,9 @@ services:
 
   frontend:
     build:
-      context: ./frontend  # Шлях до Dockerfile для frontend
-      dockerfile: Dockerfile  # Назва Dockerfile
-    container_name: react-frontend
+      context: ./frontend 
+      dockerfile: Dockerfile
+    container_name: frontend-react
     ports:
       - "3000:3000"
     networks:
